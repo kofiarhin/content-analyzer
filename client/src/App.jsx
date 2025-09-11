@@ -1,5 +1,13 @@
 import { useEffect } from "react";
 import { BASE_URL } from "./constants/constants";
+import Footer from "./components/Footer/Footer";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  BrowserRouter,
+} from "react-router-dom";
+import Home from "./Pages/Home/Home";
 
 const App = () => {
   useEffect(() => {
@@ -14,8 +22,13 @@ const App = () => {
   }, []);
 
   return (
-    <div>
-      <h1 className="heading center">Hello World</h1>
+    <div className="container">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
     </div>
   );
 };

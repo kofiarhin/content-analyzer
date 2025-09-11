@@ -1,16 +1,17 @@
 const app = require("../app");
 const request = require("supertest");
+const sampleData = require("./sampleData.json");
+const videoChannelAnalyzer = require("../ai/videoAnalyzer");
 
 describe("testing server", () => {
-  it("just a passing test", async () => {
-    const { statusCode, body } = await request(app).get("/");
-    console.log({ statusCode });
-  });
+  // it("just a passing test", async () => {
+  //   const res = await request(app).get("/api/health");
+  //   expect(res.statusCode).toBe(200);
+  //   expect(res.body).toHaveProperty("message");
+  // });
 
-  it("should test for checkout session", async () => {
-    const { statusCode, body } = await request(app)
-      .post("/api/checkout")
-      .send({ message: "some pricing details" });
-    console.log({ statusCode, body });
+  it("should analyze data properly", async () => {
+    const result = await videoChannelAnalyzer(sampleData);
+    console.log(result);
   });
 });

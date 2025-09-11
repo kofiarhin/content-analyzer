@@ -1,0 +1,42 @@
+[
+  {
+    "channel": "https://www.youtube.com/@devkofi",
+    "videos": [
+      {
+        "id": "vid1",
+        "title": "Build a Fullstack Chat App with MERN and Socket.IO",
+        "url": "https://www.youtube.com/watch?v=vid1",
+        "duration": 3600,
+        "viewCount": 5000
+      },
+      {
+        "id": "vid2",
+        "title": "Mastering JavaScript Callbacks, Promises, and Async/Await",
+        "url": "https://www.youtube.com/watch?v=vid2",
+        "duration": 900,
+        "viewCount": 2300
+      },
+      {
+        "id": "vid3",
+        "title": "React Crash Course for Beginners (2024)",
+        "url": "https://www.youtube.com/watch?v=vid3",
+        "duration": 1800,
+        "viewCount": 8400
+      },
+      {
+        "id": "vid4",
+        "title": "How to Deploy MERN Apps to Render",
+        "url": "https://www.youtube.com/watch?v=vid4",
+        "duration": 720,
+        "viewCount": 1200
+      },
+      {
+        "id": "vid5",
+        "title": "Clean Code Practices in JavaScript Projects",
+        "url": "https://www.youtube.com/watch?v=vid5",
+        "duration": 600,
+        "viewCount": 900
+      }
+    ]
+  }
+]

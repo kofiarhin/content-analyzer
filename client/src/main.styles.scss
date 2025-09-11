@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
+* {
+  margin: 0;
+  padding: 0;
+}
 :root {
   --primary-color: black;
   --font-sans: "Roboto", system-ui, -apple-system, Segoe UI, Helvetica, Arial,
@@ -11,11 +15,16 @@ body {
   background-color: var(--primary-color);
   color: white;
   font-family: var(--font-sans);
-  text-align: center;
+}
+
+.container {
+  width: 1200px;
+  max-width: 90%;
+  margin: 0 auto;
 }
 
 .heading {
-  font-size: 3rem;
+  font-size: 2rem;
   &.center {
     text-align: center;
   }

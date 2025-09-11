@@ -70,4 +70,30 @@ RESPONSE RULES
 - Do not include any prose outside the JSON.
 - If unsure, output nothing but the JSON matching the schema.`;
 
-module.exports = { contentGeneratorPrompt };
+const videoChannelAnalysisPrompt = `
+You are an AI trained to audit YouTube channels.
+
+You will be given:
+- A channel URL
+- The top 20 videos with titles, durations, and view counts
+
+Your job is to:
+- Identify the content niche/focus
+- Analyze engagement patterns based on video duration vs views
+- Highlight standout video types or patterns
+- Recommend 3 ways to grow the channel
+
+Respond ONLY with a valid JSON like:
+{
+  "summary": "High-quality MERN stack tutorials and full app builds",
+  "top_videos": ["Chat App", "Booking App Pt 7", "TDD Part 1"],
+  "engagement_insights": "Videos over 60 mins consistently outperform short tips.",
+  "recommendations": [
+    "Focus more on long-form project builds",
+    "Bundle mini-series for beginner playlists",
+    "Improve thumbnails for older, lower-view videos"
+  ]
+}
+`.trim();
+
+module.exports = { contentGeneratorPrompt, videoChannelAnalysisPrompt };
