@@ -9,8 +9,6 @@ const Home = () => {
     setResData(data);
   };
 
-  console.log({ data: resData });
-
   return (
     <div id="home">
       <h1 className="heading center">Analyze Youtube Channel</h1>
