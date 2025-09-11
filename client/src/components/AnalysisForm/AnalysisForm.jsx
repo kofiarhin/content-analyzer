@@ -8,13 +8,8 @@ const AnalysisForm = ({ onData }) => {
   const [url, setUrl] = useState("");
 
   const handleChange = (e) => {
-    Home;
     setUrl(e.target.value);
   };
-
-  if (isLoading) {
-    return <Spinner />;
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,21 +17,29 @@ const AnalysisForm = ({ onData }) => {
       setIsLoading(true);
       const res = await fetch(`${BASE_URL}/api/analysis`, {
         headers: {
-          "content-type": "application/json",
+          "Content-Type": "application/json",
         },
         method: "POST",
         body: JSON.stringify({ url }),
       });
+
       if (!res.ok) {
-        throw new Error("tehre was a problem fetching data");
+        throw new Error("There was a problem fetching data");
       }
+
       const data = await res.json();
-      setIsLoading(false);
       onData(data);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <Spinner />;
+  }
+
   return (
     <div id="analysis-form">
       <form onSubmit={handleSubmit}>
@@ -45,9 +48,9 @@ const AnalysisForm = ({ onData }) => {
           name="url"
           onChange={handleChange}
           value={url}
-          placeholder="enter youtuve change url here"
+          placeholder="Enter YouTube channel URL here"
         />
-        <button>Start Analysis</button>
+        <button type="submit">Start Analysis</button>
       </form>
     </div>
   );
