@@ -5,9 +5,10 @@ import Spinner from "../../components/Spinner/Spinner";
 
 const AnalysisForm = ({ onData }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [url, setUrl] = useState("https://www.youtube.com/@devkofi");
+  const [url, setUrl] = useState("");
 
   const handleChange = (e) => {
+    Home;
     setUrl(e.target.value);
   };
 
