@@ -6,6 +6,7 @@ const App = () => {
     const getData = async () => {
       const res = await fetch(BASE_URL);
       const data = await res.json();
+      console.log("base_url: ", BASE_URL);
       console.log({ data });
     };
 
