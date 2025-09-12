@@ -93,13 +93,16 @@ RULES:
   // Parse or fail with raw
   try {
     const parsed = JSON.parse(jsonText);
+    if (!parsed.ok) {
+      throw new Error(
+        "AI response indicates failure: " + (parsed.error || "Unknown error")
+      );
+    }
     return parsed;
-  } catch {
-    return {
-      ok: false,
-      error: "Failed to parse JSON",
-      raw: raw.slice(0, 1500),
-    };
+  } catch (parseError) {
+    throw new Error(
+      "Failed to parse AI response as JSON: " + parseError.message
+    );
   }
 };
 

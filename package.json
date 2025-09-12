@@ -1,7 +1,7 @@
 {
   "name": "full-stack-starter",
   "version": "1.0.0",
-  "main": "server/serser.js",
+  "main": "server/server.js",
   "scripts": {
     "test": "jest --watchAll",
     "start": "node  server/server.js",
