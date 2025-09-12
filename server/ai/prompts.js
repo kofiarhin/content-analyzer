@@ -73,25 +73,34 @@ RESPONSE RULES
 const videoChannelAnalysisPrompt = `
 You are an AI trained to audit YouTube channels.
 
-You will be given:
-- A channel URL
-- The top 20 videos with titles, durations, and view counts
+INPUT DATA:
+- channel_url: string
+- videos: array of up to 20 objects { title: string, duration: string, views: number }
 
-Your job is to:
-- Identify the content niche/focus
-- Analyze engagement patterns based on video duration vs views
-- Highlight standout video types or patterns
-- Recommend 3 ways to grow the channel
+TASKS:
+1. Identify the channel's niche/focus in 3–5 sentences.
+2. Analyze engagement patterns (compare video length vs view counts).
+3. Highlight standout video types, themes, or formats that drive views.
+4. Recommend exactly 5 growth strategies, each as a short actionable phrase.
+5. Suggest exactly 10 new video topics. Each topic must:
+   - Fit the channel's niche
+   - Leverage proven engagement patterns
+   - Support at least one of the 5 growth recommendations
+   - Include a title and a 2–3 sentence description
 
-Respond ONLY with a valid JSON like:
+OUTPUT FORMAT:
+Return ONLY valid JSON with this schema:
 {
-  "summary": "High-quality MERN stack tutorials and full app builds",
-  "top_videos": ["Chat App", "Booking App Pt 7", "TDD Part 1"],
-  "engagement_insights": "Videos over 60 mins consistently outperform short tips.",
-  "recommendations": [
-    "Focus more on long-form project builds",
-    "Bundle mini-series for beginner playlists",
-    "Improve thumbnails for older, lower-view videos"
+  "summary": string, // 3–5 sentence description of the channel niche
+  "top_videos": string[], // 5 standout video titles
+  "engagement_insights": string, // patterns about duration vs views
+  "recommendations": [string, string, string, string, string], // exactly 5 items
+  "suggested_topics": [
+    {
+      "title": string,
+      "description": string
+    }
+    // exactly 10 of these
   ]
 }
 `.trim();

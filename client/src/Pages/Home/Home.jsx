@@ -1,3 +1,4 @@
+// src/pages/Home/Home.jsx
 import "./home.styles.scss";
 import { useState } from "react";
 import AnalysisForm from "../../components/AnalysisForm/AnalysisForm";
@@ -11,7 +12,7 @@ const Home = () => {
 
   return (
     <div id="home">
-      <h1 className="heading center">Analyze Youtube Channel</h1>
+      <h1 className="heading center">Analyze YouTube Channel</h1>
       <AnalysisForm onData={handleOnData} />
 
       {resData && (
@@ -19,35 +20,50 @@ const Home = () => {
           {/* res-unit */}
           <div className="res-unit">
             <h2>Top Videos</h2>
-            {resData.top_videos?.map((item, index) => (
+            {resData?.top_videos?.map((item, index) => (
               <p key={index}>
-                {" "}
                 {index + 1}. {item}
               </p>
             ))}
           </div>
           {/* end res-unit */}
+
           {/* res-unit */}
           <div className="res-unit">
             <h2>Insights</h2>
-            <p>{resData.engagement_insights}</p>
+            <p>{resData?.engagement_insights}</p>
           </div>
           {/* end res-unit */}
+
           {/* res-unit */}
-          <div className="res-unit"></div> <h2>Summary</h2>
-          <p>{resData?.summary}</p>
+          <div className="res-unit">
+            <h2>Summary</h2>
+            <p>{resData?.summary}</p>
+          </div>
           {/* end res-unit */}
+
           {/* res-unit */}
           <div className="res-unit">
             <h2>Recommendations</h2>
-            {resData?.recommendations?.map((item, index) => {
-              return (
-                <p>
-                  {" "}
-                  {index + 1}. {item}{" "}
-                </p>
-              );
-            })}
+            {resData?.recommendations?.map((item, index) => (
+              <p key={index}>
+                {index + 1}. {item}
+              </p>
+            ))}
+          </div>
+          {/* end res-unit */}
+
+          {/* res-unit */}
+          <div className="res-unit">
+            <h2>Suggested Topics</h2>
+            {resData?.suggested_topics?.map((s, index) => (
+              <div className="suggested-unit" key={`${s.topic}-${index}`}>
+                <h3>
+                  {index + 1}. {s.topic}
+                </h3>
+                <p>{s.description}</p>
+              </div>
+            ))}
           </div>
           {/* end res-unit */}
         </div>

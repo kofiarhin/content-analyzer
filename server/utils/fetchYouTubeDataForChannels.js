@@ -63,7 +63,11 @@ function toChannelVideosUrl(identifier) {
       return id;
     }
     // If it is a channel/user/custom/handle root, append /videos for stable extraction
-    if (/^(channel\/UC[0-9A-Za-z_-]{22}|@[\w.-]{3,}|c\/[A-Za-z0-9_-]+|user\/[A-Za-z0-9_-]+)$/i.test(path)) {
+    if (
+      /^(channel\/UC[0-9A-Za-z_-]{22}|@[\w.-]{3,}|c\/[A-Za-z0-9_-]+|user\/[A-Za-z0-9_-]+)$/i.test(
+        path
+      )
+    ) {
       return id.replace(/\/?$/, "") + "/videos";
     }
   }
@@ -83,9 +87,19 @@ function fetchHtml(url) {
         },
       },
       (res) => {
-        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        if (
+          res.statusCode >= 300 &&
+          res.statusCode < 400 &&
+          res.headers.location
+        ) {
           // Follow simple redirect
-          return resolve(fetchHtml(res.headers.location.startsWith("http") ? res.headers.location : new URL(res.headers.location, url).toString()));
+          return resolve(
+            fetchHtml(
+              res.headers.location.startsWith("http")
+                ? res.headers.location
+                : new URL(res.headers.location, url).toString()
+            )
+          );
         }
         if (res.statusCode !== 200) {
           reject(new Error(`HTTP ${res.statusCode} for ${url}`));
@@ -116,7 +130,9 @@ function parseDurationToSeconds(text) {
 // Helper: extract numeric view count from strings like "123K views"
 function parseViewCount(text) {
   if (!text) return null;
-  const m = String(text).replace(/[,\s]/g, "").match(/([0-9]*\.?[0-9]+)([KMB])?/i);
+  const m = String(text)
+    .replace(/[,\s]/g, "")
+    .match(/([0-9]*\.?[0-9]+)([KMB])?/i);
   if (!m) return null;
   let num = parseFloat(m[1]);
   const suffix = m[2] ? m[2].toUpperCase() : null;
@@ -124,6 +140,32 @@ function parseViewCount(text) {
   else if (suffix === "M") num *= 1_000_000;
   else if (suffix === "B") num *= 1_000_000_000;
   return Math.round(num);
+}
+
+// --- Safe JSON parse helper ---
+function safeJsonParse(raw) {
+  if (typeof raw !== "string") throw new Error("Expected string from yt-dlp");
+  let s = raw.trim();
+
+  // Strip accidental markdown/code fences
+  s = s
+    .replace(/^```(?:json)?/i, "")
+    .replace(/```$/i, "")
+    .trim();
+
+  // Replace raw line breaks with spaces (prevents "invalid_json_from_model"-style issues)
+  s = s.replace(/([^\\])\r?\n/g, "$1 ");
+
+  // Remove trailing commas before closing } or ]
+  s = s.replace(/,\s*([}\]])/g, "$1");
+
+  try {
+    return JSON.parse(s);
+  } catch (e) {
+    throw new Error(
+      `Failed to parse yt-dlp JSON: ${e.message}\nRaw: ${s.slice(0, 500)}`
+    );
+  }
 }
 
 // Fallback: scrape channel videos page to get top N video IDs
@@ -151,13 +193,17 @@ async function scrapeChannelVideosList(channelIdentifier, limit) {
     const contents = videosTab?.content?.richGridRenderer?.contents || [];
     const items = [];
     for (const c of contents) {
-      const vr = c?.richItemRenderer?.content?.videoRenderer || c?.videoRenderer;
+      const vr =
+        c?.richItemRenderer?.content?.videoRenderer || c?.videoRenderer;
       if (!vr || !vr.videoId) continue;
       items.push({
         id: vr.videoId,
         title: vr.title?.runs?.[0]?.text || null,
         duration: parseDurationToSeconds(
-          vr.lengthText?.simpleText || vr.thumbnailOverlays?.find?.((o) => o.thumbnailOverlayTimeStatusRenderer)?.thumbnailOverlayTimeStatusRenderer?.text?.simpleText
+          vr.lengthText?.simpleText ||
+            vr.thumbnailOverlays?.find?.(
+              (o) => o.thumbnailOverlayTimeStatusRenderer
+            )?.thumbnailOverlayTimeStatusRenderer?.text?.simpleText
         ),
         viewCount: parseViewCount(vr.viewCountText?.simpleText),
         uploadDate: null,
@@ -203,12 +249,14 @@ async function runYtDlp(args) {
             }
           } else {
             try {
-              const data = JSON.parse(stdout);
+              const data = safeJsonParse(stdout);
               resolve(data);
             } catch (parseError) {
-              const message = `JSON parse failed: ${parseError.message}\nstdout: ${stdout
+              const message = `JSON parse failed: ${
+                parseError.message
+              }\nstdout: ${stdout.slice(0, 500).toString()}\nstderr: ${stderr
                 .slice(0, 500)
-                .toString()}\nstderr: ${stderr.slice(0, 500).toString()}`;
+                .toString()}`;
               reject(new Error(message));
             }
           }
@@ -268,12 +316,16 @@ async function fetchYouTubeDataForChannels(channelIdsOrUrls = [], opts = {}) {
         limit.toString(),
         toChannelVideosUrl(channel),
       ];
-      if (debug) channelResult.debug.push(`playlistArgs=${JSON.stringify(playlistArgs)}`);
+      if (debug)
+        channelResult.debug.push(
+          `playlistArgs=${JSON.stringify(playlistArgs)}`
+        );
       let playlistData;
       try {
         playlistData = await runYtDlp(playlistArgs);
       } catch (e) {
-        if (debug) channelResult.debug.push(`yt-dlp playlist error: ${e.message}`);
+        if (debug)
+          channelResult.debug.push(`yt-dlp playlist error: ${e.message}`);
         // Try scrape fallback if yt-dlp missing or failed
         const scraped = await scrapeChannelVideosList(channel, limit);
         if (scraped.length > 0) {
@@ -299,7 +351,11 @@ async function fetchYouTubeDataForChannels(channelIdsOrUrls = [], opts = {}) {
           }`
         );
 
-      if (!playlistData || !playlistData.entries || !Array.isArray(playlistData.entries)) {
+      if (
+        !playlistData ||
+        !playlistData.entries ||
+        !Array.isArray(playlistData.entries)
+      ) {
         // Fallback scrape if yt-dlp didn't provide entries
         const scraped = await scrapeChannelVideosList(channel, limit);
         if (scraped.length > 0) {

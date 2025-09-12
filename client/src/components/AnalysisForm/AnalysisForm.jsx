@@ -5,14 +5,16 @@ import Spinner from "../../components/Spinner/Spinner";
 
 const AnalysisForm = ({ onData }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [url, setUrl] = useState("");
+  const [username, setUsername] = useState("");
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setUrl(e.target.value);
+    setUsername(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     try {
       setIsLoading(true);
       const res = await fetch(`${BASE_URL}/api/analysis`, {
@@ -20,17 +22,28 @@ const AnalysisForm = ({ onData }) => {
           "Content-Type": "application/json",
         },
         method: "POST",
-        body: JSON.stringify({ url }),
+        body: JSON.stringify({ username }),
       });
 
       if (!res.ok) {
-        throw new Error("There was a problem fetching data");
+        const text = await res.text();
+        console.log("Response status:", res.status);
+        console.log("Response text:", text);
+        let errorData;
+        try {
+          errorData = JSON.parse(text);
+        } catch (e) {
+          console.error("JSON parse error:", e.message);
+          errorData = { error: "Unknown error" };
+        }
+        throw new Error(errorData.error || "Failed to fetch data");
       }
 
       const data = await res.json();
       onData(data);
     } catch (error) {
       console.error(error.message);
+      setError(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -45,13 +58,14 @@ const AnalysisForm = ({ onData }) => {
       <form onSubmit={handleSubmit}>
         <input
           type="text"
-          name="url"
+          name="username"
           onChange={handleChange}
-          value={url}
-          placeholder="Enter YouTube channel URL here"
+          value={username}
+          placeholder="Enter YouTube username here"
         />
         <button type="submit">Start Analysis</button>
       </form>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };

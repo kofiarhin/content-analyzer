@@ -2,3 +2,59 @@ frontend: https://stripe-payment-gray.vercel.app/
 backend: https://stripe-payment-ibm6.onrender.com/
 heroku create content-analyzer 
 https://content-analyzer-6d9dd0209629.herokuapp.com/ | https://git.heroku.com/content-analyzer.git
+
+heroku config:set NODE_ENV=production \
+ GROQ_API_KEY="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"
+
+
+ const videoChannelAnalysisPrompt = `
+You are an AI trained to audit YouTube channels.
+
+INPUT DATA:
+- channel_url: string
+- videos: array of up to 20 objects { title: string, duration: string, views: number }
+
+TASKS:
+1. Identify the channel's niche/focus in 5 sentences.
+2. Analyze engagement patterns (compare video length vs view counts).
+3. Highlight standout video types, themes, or formats that drive views.
+4. Recommend exactly 3 growth strategies, each as a short actionable phrase.
+5. Suggest exactly 10 new video topics. Each topic must:
+   - Fit the channel's niche
+   - Leverage proven engagement patterns
+   - Support at least one of the 5 growth recommendations
+   - Include a title and a 3 sentence description
+
+OUTPUT FORMAT:
+Return ONLY valid JSON with this schema:
+{
+  "summary": string, // concise channel niche
+  "top_videos": string[], // 3 standout video titles
+  "engagement_insights": string, // patterns about duration vs views
+  "recommendations": [string, string, string], // exactly 3 items
+  "suggested_topics": [
+    {
+      "title": string,
+      "description": string
+    }
+    // exactly 10 of these
+  ]
+}
+
+RULES:
+- No extra commentary outside JSON.
+- Ensure JSON is valid and parseable.
+`.trim();
+
+
+https://www.googleapis.com/youtube/v3/search?part=snippet&q=mern&maxResults=1&key=AIzaSyB27sq2mu5SbWeJUxnCzPsTV4fs3jsrFeo
+
+//data structure of youtube api
+[{
+          videoId: 'xyI7V5nWBNw',
+          publishedAt: '2024-09-05T19:40:39Z',
+          title: 'Node.js Crash Course (Speed Coding)',
+          thumbnails: [Object],
+          duration: 'PT19M53S',
+          stats: [Object]
+        }]
