@@ -7,8 +7,6 @@ const App = () => {
   const { data, mutate } = useAnalyzeMutation();
   const [username, setUsername] = useState("@devkofi");
 
-  console.log({ data });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     mutate(username);
@@ -19,6 +17,7 @@ const App = () => {
   return (
     <div id="app">
       <div className="container">
+        <h1 className="heading center">Youtube Content Analyzer</h1>
         <form onSubmit={handleSubmit}>
           <input
             type="text"
@@ -29,6 +28,8 @@ const App = () => {
           />
           <button type="submit">Start Analysis</button>
         </form>
+
+        {data && <p className="heading"> {data.summary} </p>}
       </div>
     </div>
   );
