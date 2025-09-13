@@ -3,8 +3,7 @@ backend: https://stripe-payment-ibm6.onrender.com/
 heroku create content-analyzer 
 https://content-analyzer-6d9dd0209629.herokuapp.com/ | https://git.heroku.com/content-analyzer.git
 
-heroku config:set NODE_ENV=production
-# Note: Set GROQ_API_KEY and YOUTUBE_API_KEY in Heroku config vars
+
 
 
 # Note: Set YOUTUBE_API_KEY in Heroku config vars

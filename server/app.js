@@ -25,9 +25,9 @@ app.post("/api/analysis", async (req, res, next) => {
     const { username } = req.body || {};
 
     if (!username || typeof username !== "string" || !username.trim()) {
-      return res
-        .status(400)
-        .json({ error: "Invalid 'username' provided. Expected non-empty string." });
+      return res.status(400).json({
+        error: "Invalid 'username' provided. Expected non-empty string.",
+      });
     }
 
     // Validate required env vars early for clearer errors in production
@@ -47,6 +47,7 @@ app.post("/api/analysis", async (req, res, next) => {
     const { id } = await fetchChannelByName(username);
     const data = await fetchRecentUploads(id);
     const result = await analyzeVideos(data);
+
     return res.json(result);
   } catch (err) {
     // Normalize error responses to help the client display actionable messages
@@ -68,6 +69,10 @@ app.post("/api/analysis", async (req, res, next) => {
 
 app.post("/api/health", async (req, res, next) => {
   return res.json({ message: "checkout session" });
+});
+
+app.get("/api/health", async (req, res, next) => {
+  return res.json({ message: "Content Analyzer" });
 });
 
 module.exports = app;
