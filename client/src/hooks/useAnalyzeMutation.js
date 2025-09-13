@@ -14,12 +14,14 @@ const useAnalyzeMutation = () => {
       throw new Error("something went wrong");
     }
     const data = await res.json();
-
     return data;
   };
   return useMutation({
     mutationKey: ["analyze"],
     mutationFn: (data) => handleAnalysis(data),
+    onSuccess: (data) => {
+      console.log({ data });
+    },
   });
 };
 
