@@ -1,33 +1,35 @@
-import { useEffect } from "react";
-import { BASE_URL } from "./constants/constants";
-import Footer from "./components/Footer/Footer";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  BrowserRouter,
-} from "react-router-dom";
-import Home from "./Pages/Home/Home";
+import "./app.styles.scss";
+import React from "react";
+import useAnalyzeMutation from "./hooks/useAnalyzeMutation";
+import { useState } from "react";
 
 const App = () => {
-  useEffect(() => {
-    const getData = async () => {
-      const res = await fetch(BASE_URL);
-      const data = await res.json();
-      console.log("base_url: ", BASE_URL);
-    };
+  const { data, mutate } = useAnalyzeMutation();
+  const [username, setUsername] = useState("@devkofi");
 
-    getData();
-  }, []);
+  console.log({ data });
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    mutate(username);
+  };
+  const handleChange = (e) => {
+    setUsername(e.target.value);
+  };
   return (
-    <div className="container">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
+    <div id="app">
+      <div className="container">
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            id="username"
+            placeholder="Enter username here"
+            value={username}
+            onChange={handleChange}
+          />
+          <button type="submit">Start Analysis</button>
+        </form>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,19 @@
+#app {
+  min-height: 100vh;
+  form {
+    input {
+      display: block;
+      width: 100%;
+      margin-bottom: 1rem;
+      padding: 0.8rem 0rem;
+      font-size: 1.2rem;
+      text-indent: 20px;
+    }
+    button {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1.2rem;
+    }
+  }
+}
