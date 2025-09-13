@@ -19,9 +19,6 @@ const useAnalyzeMutation = () => {
   return useMutation({
     mutationKey: ["analyze"],
     mutationFn: (data) => handleAnalysis(data),
-    onSuccess: (data) => {
-      console.log({ data });
-    },
   });
 };
 
