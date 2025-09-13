@@ -2,6 +2,7 @@ import "./app.styles.scss";
 import React from "react";
 import useAnalyzeMutation from "./hooks/useAnalyzeMutation";
 import { useState } from "react";
+import Footer from "./components/Footer/Footer";
 
 const App = () => {
   const { data, mutate } = useAnalyzeMutation();
@@ -30,6 +31,7 @@ const App = () => {
         </form>
 
         {data && <p className="heading"> {data.summary} </p>}
+        <Footer />
       </div>
     </div>
   );
