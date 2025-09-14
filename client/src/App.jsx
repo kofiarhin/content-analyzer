@@ -35,7 +35,7 @@ const App = () => {
           <button type="submit">Start Analysis</button>
         </form>
 
-        {data && <p className="heading"> {data.summary} </p>}
+        {data && <p> {data.summary} </p>}
         <Footer />
       </div>
     </div>
